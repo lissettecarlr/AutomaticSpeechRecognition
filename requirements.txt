@@ -1,0 +1,9 @@
+onnxruntime-gpu
+numpy
+librosa
+pyyaml
+typeguard==2.13.3
+scipy
+openai
+langid
+websockets
