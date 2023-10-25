@@ -68,3 +68,15 @@ openai的whisper在线语音识别，请求方式来自[这里](https://platform
 
 [github仓库](https://github.com/alibaba-damo-academy/FunASR)，需要先部署服务端，这里只是代码只是客户端进行接口的调用。
 
+
+## 报错：
+
+### 1
+```bash
+ValueError: An error occurred: unknown format: 3
+```
+输入音频的格式不支持，可以使用sox进行转换，例如
+```bash
+sox test.wav -b 16 -e signed-integer test2.wav
+```
+* [sox的github](https://github.com/chirlu/sox)
