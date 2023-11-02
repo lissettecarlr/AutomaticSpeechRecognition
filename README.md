@@ -66,7 +66,7 @@ openai的whisper在线语音识别，请求方式来自[这里](https://platform
 
 ### funasr
 
-[github仓库](https://github.com/alibaba-damo-academy/FunASR)，需要先部署服务端，这里只是代码只是客户端进行接口的调用。
+[github仓库](https://github.com/alibaba-damo-academy/FunASR)，需要先部署服务端，这里代码只是客户端进行接口的调用。部署方式可以看官方仓库，也可以参考[笔迹](https://blog.kala.love/posts/cbe699d7/)
 
 
 ## 报错：
