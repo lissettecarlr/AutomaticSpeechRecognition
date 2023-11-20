@@ -28,7 +28,7 @@
 cp config.yaml.example config.yaml
 ```
 * channel 从paraformer、whisper_online、funasr中选择一种
-* 如果选择whisper_online，则需要配置openai的key
+* 如果选择whisper_online，则需要配置openai的key和代理地址
 * 如果选择funasr，则需要配置funasr的服务端地址
 
 ## 使用
@@ -51,6 +51,8 @@ except Exception as e:
     print(e)
 ```
 
+可以直接执行`python .\example.py`进行测试
+
 
 ## 关于转换方式
 
@@ -62,11 +64,12 @@ except Exception as e:
 
 ### whisper_online
 
-openai的whisper在线语音识别，请求方式来自[这里](https://platform.openai.com/docs/api-reference/audio)
+openai的whisper在线语音识别，[官方文档](https://platform.openai.com/docs/guides/speech-to-text)。实际上就是调用接口而已。
+使用时注意将openai升级到最新版本，改动了调用方式。然后需要配置密匙和代理地址。准确率还行，但是速度太慢了。
 
 ### funasr
 
-[github仓库](https://github.com/alibaba-damo-academy/FunASR)，需要先部署服务端，这里代码只是客户端进行接口的调用。部署方式可以看官方仓库，也可以参考[笔记](https://blog.kala.love/posts/cbe699d7/)
+[github仓库](https://github.com/alibaba-damo-academy/FunASR)，需要先部署服务端，这里代码只是客户端进行接口的调用。部署方式可以看官方仓库，也可以参考[笔记](https://blog.kala.love/posts/cbe699d7/)。目前该方式是最优解
 
 
 ## 报错：

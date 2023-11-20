@@ -12,7 +12,8 @@ class ASR:
         elif config['channel'] == "whisper_online":
             from kuonasr.whisper_online.whisper_app import Whispers
             key = config['OPENAI']['key']
-            self.service = Whispers(key)
+            base_url = config['OPENAI']['url']
+            self.service = Whispers(key,base_url)
         elif config['channel'] == 'funasr':
             from kuonasr.funasr.client import FunASRClient
             self.service = FunASRClient(config['funasr']['url'])
@@ -46,5 +47,14 @@ class ASR:
             logger.info("asr over. 文件 {} ,转换耗时:{}，结果：{}".format(audio_path,round(time.time()-start_time,2),result))
             return result
         
+        elif config['channel'] == 'whisper_online':
+            start_time = time.time()
+            try:
+                result = self.service.infer(audio_path) 
+            except Exception as e:
+                raise ValueError("语音转换失败，错误信息：{}".format(e))
+            logger.info("asr over. 文件 {} ,转换耗时:{}，结果：{}".format(audio_path,round(time.time()-start_time,2),result))
+            return result
+
         else:
             raise ValueError("不支持的asr服务,请检查配置文件channel字段")
