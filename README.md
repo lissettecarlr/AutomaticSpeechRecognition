@@ -33,7 +33,7 @@ cp config.yaml.example config.yaml
 
 ## 使用
 
-*如果使用funasr，则需要部署服务端*
+*如果使用funasr，则需要部署服务端，这里推荐使用该方式*
 
 ```python
 from kuonasr import ASR
@@ -51,8 +51,16 @@ except Exception as e:
     print(e)
 ```
 
-可以直接执行`python .\example.py`进行测试
+可以直接执行`python .\example.py`进行测试。
 
+使用paraformer时：
+![paraformer](./file/paraformer.gif)
+
+使用whisper_online时：
+![whisper_online](./file/whisper_online.gif)
+
+使用funasr时：
+![funasr](./file/funasr.gif)
 
 ## 关于转换方式
 

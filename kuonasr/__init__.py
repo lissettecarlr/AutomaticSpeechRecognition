@@ -6,6 +6,7 @@ from loguru import logger
 import time
 class ASR:
     def __init__(self) -> None:
+        start_time = time.time()
         if config['channel'] == "parafomer":
             from kuonasr.Paraformer import paraformer 
             self.service = paraformer()  
@@ -18,7 +19,7 @@ class ASR:
             from kuonasr.funasr.client import FunASRClient
             self.service = FunASRClient(config['funasr']['url'])
 
-        logger.info("asr init : {}".format(config['channel']))
+        logger.info("asr init : {} ， 耗时：{}".format(config['channel'],round(time.time()-start_time,2)))
    
     def test(self):
         logger.debug("asr test")
