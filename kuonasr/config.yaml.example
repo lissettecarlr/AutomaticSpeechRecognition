@@ -7,3 +7,10 @@ OPENAI:
 
 funasr:
    url: ws://172.0.0.1:1234
+
+whispers:
+  model_name: "small"
+  device : 'cuda'
+  language : "zh"
+  beam_size : 5
+  min_silence_duration_ms : 1000

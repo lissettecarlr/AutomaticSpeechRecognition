@@ -7,3 +7,4 @@ scipy
 openai
 langid
 websockets
+faster-whisper

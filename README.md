@@ -23,13 +23,19 @@
 
 * websockets
 
+### whisper_offline
+
+* torch
+* faster-whisper
+
 ## 配置
 ```bash
 cp config.yaml.example config.yaml
 ```
-* channel 从paraformer、whisper_online、funasr中选择一种
+* channel 从paraformer、whisper_online、funasr、whisper_offline中选择一种
 * 如果选择whisper_online，则需要配置openai的key和代理地址
 * 如果选择funasr，则需要配置funasr的服务端地址
+* 如果选择whisper_offline，模型选择：tiny、base、medium、small、large-v2、large-v3、tiny.en、base.en、medium.en、small.en，device选择：cpu、cuda
 
 ## 使用
 
@@ -62,6 +68,10 @@ except Exception as e:
 使用funasr时：
 ![funasr](./file/funasr.gif)
 
+使用whisper_offline时：
+![whisper_offline](./file/whisper_offline.png)
+
+
 ## 关于转换方式
 
 ### paraformer
@@ -79,6 +89,9 @@ openai的whisper在线语音识别，[官方文档](https://platform.openai.com/
 
 [github仓库](https://github.com/alibaba-damo-academy/FunASR)，需要先部署服务端，这里代码只是客户端进行接口的调用。部署方式可以看官方仓库，也可以参考[笔记](https://blog.kala.love/posts/cbe699d7/)。目前该方式是最优解
 
+### whisper_offline
+
+使用[faster-whisper](https://github.com/SYSTRAN/faster-whisper)进行本地推理
 
 ## 报错：
 
