@@ -1,5 +1,5 @@
 ## kunasr
-该仓库用于语音识别，目前有三种实现方式，分别是paraformer、whisper_online、funasr。主要用于服务[kuon](https://github.com/lissettecarlr/kuon)仓库。
+该仓库用于语音识别，目前有三种实现方式，分别是paraformer、whisper_online、funasr、whisper_offline。主要用于服务[kuon](https://github.com/lissettecarlr/kuon)仓库。
 
 ## 依赖
 
