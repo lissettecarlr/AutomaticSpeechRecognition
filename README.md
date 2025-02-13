@@ -20,8 +20,10 @@ docker build -f Dockerfile.dev -t kuonasr-api .
 
 运行容器（将本地代码目录挂载到容器中）
 ```bash
-docker run -v $(pwd):/app -p 23333:23333 -e ALIYUN_API_KEY=your_aliyun_api_key kuonasr-api
+docker run --name kuonasr-api -v $(pwd):/app -p 23333:23333 -e ALIYUN_API_KEY=your_aliyun_api_key kuonasr-api
 ```
+
+
 
 #### 生产docker
 
@@ -32,8 +34,9 @@ docker build -t kuonasr-api .
 
 运行
 ```bash
-docker run -p 23333:23333 -e ALIYUN_API_KEY=your_aliyun_api_key -v $(pwd)/logs:/app/api/logs kuonasr-api
+docker run --name kuonasr-api -p 23333:23333 -e ALIYUN_API_KEY=your_aliyun_api_key -v $(pwd)/logs:/app/api/logs kuonasr-api
 ```
+
 
 ### 目录结构
 

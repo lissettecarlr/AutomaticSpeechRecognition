@@ -1,9 +1,10 @@
-# Paraformer语音识别-v2
+# Paraformer语音识别
 
-对接阿里云百炼的Paraformer-v2模型。
+对接阿里云百炼的Paraformer模型。
 
 * [模型广场-Paraformer-v2模型](https://bailian.console.aliyun.com/#/model-market/detail/paraformer-v2)
 * [API文档](https://help.aliyun.com/zh/isi/developer-reference/api-details)
+
 
 ## 使用
 
@@ -22,6 +23,17 @@ task_response = dashscope.audio.asr.Transcription.async_call(
         'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_example_1.wav',
     ])
 ```
+参数说明（跟多见[文档](https://help.aliyun.com/zh/model-studio/developer-reference/paraformer-api/?spm=a2c4g.11186623.0.0.2f89695bdcF1jt#b73b0c4423oa1)）：
+* model: 模型名称：
+    * paraformer-v2 ：支持任意采样率，支持中文（包含中文普通话和各种方言）、英文、日语、韩语。支持热词功能
+    * paraformer-8k-v2
+    * paraformer-v1
+    * paraformer-8k-v1
+    * paraformer-mtl-v1
+* language_hints：仅对paraformer-v2生效，支持：zh、en、ja、ko、yue
+* vocabulary_id：热词id，使用见[定制热词](https://help.aliyun.com/zh/model-studio/developer-reference/custom-hot-words?spm=a2c4g.11186623.0.0.653d601bP8tTed)
+
+
 响应：
 ```json
 {

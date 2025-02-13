@@ -1,19 +1,24 @@
 FROM python:3.10-slim
 
-# 设置工作目录
 WORKDIR /app
 
-# 复制项目文件
+ENV TZ=Asia/Shanghai
+RUN apt-get update && apt-get install -y tzdata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 COPY . .
 
 # 安装依赖
 RUN pip install --no-cache-dir -r api/requirements.txt && \
     pip install --no-cache-dir -r kuonasr/requirements.txt
 
-# 设置环境变量
 ENV ALIYUN_API_KEY=""
+
+
+# 创建日志目录
+RUN mkdir -p /app/api/logs && \
+    chmod 777 /app/api/logs
 
 EXPOSE 23333
 
-# 启动命令
 CMD ["python", "api/app/run.py"]

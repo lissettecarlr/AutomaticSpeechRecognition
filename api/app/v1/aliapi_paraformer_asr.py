@@ -18,6 +18,11 @@ router = APIRouter()
 
 # 初始化ASR实例，从环境变量获取api_key
 api_key = os.getenv('ALIYUN_API_KEY')
+
+# 判断有没有api_key
+if not api_key:
+    raise HTTPException(status_code=500, detail="ALIYUN_API_KEY is not set")
+
 asr = AliyunParaformerASR(config={"api-key": api_key})
 
 
@@ -44,7 +49,7 @@ async def recognize(audio_items: List[AudioItem]):
     支持同时发送多个音频URL，按顺序返回识别结果
     
     Args:
-        audio_items: 包含音频URL的列表，每项包含index和tts(URL)
+        audio_items: 包含音频URL的列表，每项包含序号和音频文件
     Returns:
         返回OkResponse，data中包含按index排序的识别结果列表
     """

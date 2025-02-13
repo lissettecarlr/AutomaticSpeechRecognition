@@ -2,7 +2,11 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# 安装依赖
+ENV TZ=Asia/Shanghai
+RUN apt-get update && apt-get install -y tzdata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+
 COPY api/requirements.txt 1.txt
 COPY kuonasr/requirements/base.txt 2.txt
 COPY kuonasr/requirements/api_aliyun.txt 3.txt
@@ -10,8 +14,11 @@ RUN pip install --no-cache-dir -r 1.txt && \
     pip install --no-cache-dir -r 2.txt && \
     pip install --no-cache-dir -r 3.txt
 
-# 设置环境变量
+
 ENV ALIYUN_API_KEY=""
+
+RUN mkdir -p /app/api/logs && \
+    chmod 777 /app/api/logs
 
 EXPOSE 23333
 

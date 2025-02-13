@@ -6,7 +6,6 @@ from fastapi.responses import PlainTextResponse
 from starlette.responses import JSONResponse
 
 
-
 import logging
 logger = logging.getLogger(__name__)
 
@@ -14,9 +13,6 @@ app = FastAPI()
 logger.info(f"API服务已启动")
 
 # 引入路由
-from v1.demo import router as demo_router
-app.include_router(demo_router, prefix="/api", tags=["demo"])
-
 from v1.aliapi_paraformer_asr import router as asr_router
 app.include_router(asr_router, prefix="/v1", tags=["asr"])
 

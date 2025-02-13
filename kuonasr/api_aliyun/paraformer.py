@@ -33,6 +33,8 @@ import asyncio
 from typing import List
 import threading
 
+VALID_MODELS = ['paraformer-v2', 'paraformer-8k-v2', 'paraformer-v1', 'paraformer-8k-v1','paraformer-mtl-v1']
+
 class AliyunParaformerASR(ASRBase):
     """
     Paraformer识别类
@@ -50,6 +52,7 @@ class AliyunParaformerASR(ASRBase):
         self.config = config
         if 'api-key' not in config or config['api-key'] == '':
             raise ValueError("api-key is required")
+        
         dashscope.api_key = config['api-key']
         self.max_audio_list_length = config.get('max_audio_list_length', 100)
         self.max_audio_size_gb = config.get('max_audio_size_gb', 2)
@@ -193,13 +196,15 @@ class AliyunParaformerASR(ASRBase):
                 raise ValueError("audio size must be less than " + str(self.max_audio_size_gb) + "G")
         return audio_list_filter
    
-    def recognize(self, audio_list):
+    def recognize(self, audio_list, language_hints=['zh', 'en']):
         """
         语音识别
-        输入:音频列表
+        输入:
+            audio_list: 音频列表
+            language_hints: 语言提示列表,默认['zh', 'en']
         输出:[
             {
-                "status": "SUCCEEDED",
+                "status": "SUCCEEDED", 
                 "result": {
                     "file_url": xxx,
                     "transcripts": []
@@ -219,7 +224,7 @@ class AliyunParaformerASR(ASRBase):
             task_response = dashscope.audio.asr.Transcription.async_call(
                 model='paraformer-v2',
                 file_urls=audio_list,
-                language_hints=['zh', 'en']
+                language_hints=language_hints
             )  
         except Exception as e:
             self.logger.error("Kuonasr Paraformer ASR task_response failed: %s", e)
@@ -240,18 +245,20 @@ class AliyunParaformerASR(ASRBase):
         self.logger.info("Kuonasr Paraformer ASR asr_result: %s", asr_result)
         return asr_result
 
-    def recognize_stream(self, audio_list):
+    def recognize_stream(self, audio_list, language_hints=['zh', 'en']):
         """
         流式识别
-        输入:音频列表
+        输入:
+            audio_list: 音频列表
+            language_hints: 语言提示列表,默认['zh', 'en']
         输出:
-        {
-            "status": "SUCCEEDED",
-            "result": {
-                "file_url": xxx,
-                "transcripts": []
+            {
+                "status": "SUCCEEDED",
+                "result": {
+                    "file_url": xxx,
+                    "transcripts": []
+                }
             }
-        }
         """
         self.logger.info("Kuonasr Paraformer ASR recognize_stream")
         self.logger.info("Kuonasr Paraformer ASR audio_list: %s", audio_list)
@@ -264,7 +271,7 @@ class AliyunParaformerASR(ASRBase):
         task_response = dashscope.audio.asr.Transcription.async_call(
             model='paraformer-v2',
             file_urls=audio_list,
-            language_hints=['zh', 'en']
+            language_hints=language_hints
         )  
         completed_tasks = set()  
         start_time = time.time()
@@ -304,20 +311,21 @@ class AliyunParaformerASR(ASRBase):
                 return
             time.sleep(0.1)
 
-    async def async_recognize(self, audio_list: List[str]):
+    async def async_recognize(self, audio_list: List[str], language_hints=['zh', 'en']):
         loop = asyncio.get_running_loop()
         return await loop.run_in_executor(
             None,
             self.recognize,
-            audio_list
+            audio_list,
+            language_hints
         )
     
-    async def async_recognize_stream(self, audio_list: List[str]):
+    async def async_recognize_stream(self, audio_list: List[str], language_hints=['zh', 'en']):
         loop = asyncio.get_running_loop()
         queue = asyncio.Queue()
         def run_recognize_stream():
             try:
-                for result in self.recognize_stream(audio_list):
+                for result in self.recognize_stream(audio_list, language_hints):
                     # 将结果放入异步队列中
                     asyncio.run_coroutine_threadsafe(queue.put(result), loop)
             except Exception as e:

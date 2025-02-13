@@ -5,16 +5,23 @@ from uvicorn import Config, Server
 import signal
 from logging.handlers import RotatingFileHandler
 
-# 定义日志配置
-log_dir = os.path.join(os.path.dirname(__file__), 'logs')
+# 修改日志路径的计算方式
+log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs')
 os.makedirs(log_dir, exist_ok=True)
-log_file = os.path.join(log_dir, 'uvicorn.log')
+log_file = os.path.join(log_dir, 'api.log')
+try:
+    with open(log_file, 'a') as f:
+        pass
+except Exception as e:
+    raise e
+
+
 
 logging_config = {
     "version": 1,
     "formatters": {
         "default": {
-            "format": "%(levelname)s %(asctime)s %(name)s - %(message)s",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         },
     },
     "handlers": {
@@ -29,7 +36,7 @@ logging_config = {
             "class": "logging.handlers.RotatingFileHandler",
             "filename": log_file,
             "maxBytes": 10485760,  # 10MB
-            "backupCount": 5,      # 保留5个备份文件
+            "backupCount": 30,      # 备份文件
             "level": "DEBUG",
         },
     },
