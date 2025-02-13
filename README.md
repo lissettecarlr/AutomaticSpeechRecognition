@@ -1,106 +1,57 @@
-## kunasr
-该仓库用于语音识别，目前有三种实现方式，分别是paraformer、whisper_online、funasr、whisper_offline。主要用于服务[kuon](https://github.com/lissettecarlr/kuon)仓库。
+## kuonasr语音识别器
 
-## 依赖
+语音识别器，对接多种语音识别引擎，并提供多种使用方式。
 
-可以直接`pip install -r requirements.txt`安装所有环境，也可以根据选择方式安装
+### 支持引擎
 
-### paraformer
+* 阿里云Paraformer-v2
 
-* onnxruntime-gpu 或者 onnxruntime
-* numpy
-* librosa 用于音频分析和处理
-* pyyaml
-* typeguard==2.13.3
-* scipy
+#### 使用
 
-### whisper_online
+* 见`docs`中的文档
 
-* openai
-* langid
+#### 开发docker
 
-### funasr_client
+构建镜像
 
-* websockets
-
-### whisper_offline
-
-* torch
-* faster-whisper
-
-## 配置
 ```bash
-cp config.yaml.example config.yaml
-```
-* channel 从paraformer、whisper_online、funasr、whisper_offline中选择一种
-* 如果选择whisper_online，则需要配置openai的key和代理地址
-* 如果选择funasr，则需要配置funasr的服务端地址
-* 如果选择whisper_offline，模型选择：tiny、base、medium、small、large-v2、large-v3、tiny.en、base.en、medium.en、small.en，device选择：cpu、cuda
-
-## 使用
-
-*如果使用funasr，则需要部署服务端，这里推荐使用该方式*
-
-```python
-from kuonasr import ASR
-test = ASR()
-test.test()
+docker build -f Dockerfile.dev -t kuonasr-api .
 ```
 
-```python
-from kuonasr import ASR
-asr = ASR()
-try:
-    result = asr.convert("./kuonasr/audio/asr_example.wav")
-    print(result)
-except Exception as e:
-    print(e)
-```
-
-可以直接执行`python .\example.py`进行测试。
-
-使用paraformer时：
-![paraformer](./file/paraformer.gif)
-
-使用whisper_online时：
-![whisper_online](./file/whisper_online.gif)
-
-使用funasr时：
-![funasr](./file/funasr.gif)
-
-使用whisper_offline时：
-![whisper_offline](./file/whisper_offline.png)
-
-
-## 关于转换方式
-
-### paraformer
-
-源码来自rapid的[RapidASR仓库](https://github.com/RapidAI/RapidASR/blob/main/README.md)
-
-[模型百度云](https://pan.baidu.com/s/1sY6ENdKcxM-X7bqK07RThg?pwd=kuon)，在paraformer文件夹下的名为asr_paraformerv2的文件，将其放置到kuonasr/paraformer/models文件中。或者去原项目下载。
-
-### whisper_online
-
-openai的whisper在线语音识别，[官方文档](https://platform.openai.com/docs/guides/speech-to-text)。实际上就是调用接口而已。
-使用时注意将openai升级到最新版本，改动了调用方式。然后需要配置密匙和代理地址。准确率还行，但是速度太慢了。
-
-### funasr
-
-[github仓库](https://github.com/alibaba-damo-academy/FunASR)，需要先部署服务端，这里代码只是客户端进行接口的调用。部署方式可以看官方仓库，也可以参考[笔记](https://blog.kala.love/posts/cbe699d7/)。目前该方式是最优解
-
-### whisper_offline
-
-使用[faster-whisper](https://github.com/SYSTRAN/faster-whisper)进行本地推理
-
-## 报错：
-
-### 1
+运行容器（将本地代码目录挂载到容器中）
 ```bash
-ValueError: An error occurred: unknown format: 3
+docker run -v $(pwd):/app -p 23333:23333 -e ALIYUN_API_KEY=your_aliyun_api_key kuonasr-api
 ```
-输入音频的格式不支持，可以使用sox进行转换，例如
+
+#### 生产docker
+
+构建
 ```bash
-sox test.wav -b 16 -e signed-integer test2.wav
+docker build -t kuonasr-api .
 ```
-* [sox的github](https://github.com/chirlu/sox)
+
+运行
+```bash
+docker run -p 23333:23333 -e ALIYUN_API_KEY=your_aliyun_api_key -v $(pwd)/logs:/app/api/logs kuonasr-api
+```
+
+### 目录结构
+
+```text
+project/
+├── kuonasr/                 # 核心ASR包
+│   ├── requirements         # kuonasr依赖包
+│   ├── kuonasr/             # 实际的包代码
+│   │   ├── core/            # ASR基类定义  
+│   │   ├── api_aliyun/      # 阿里云实现
+│   │   └── utils/           # 工具函数
+│
+├── api/                    # API服务
+│   ├── requirements.txt    # API相关依赖
+│   ├── app/
+│   │   ├── V1/              # API版本
+│   └── tests/               # API测试
+│
+└── examples/              # 使用示例
+```
+
